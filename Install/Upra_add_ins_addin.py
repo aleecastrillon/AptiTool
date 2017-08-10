@@ -1,6 +1,8 @@
 import os
 import arcpy
+import xlsxwriter
 import pythonaddins
+
 
 class AptiTool(object):
     """Implementation for Upra_add_ins_addin.tool (Tool)"""
@@ -163,6 +165,21 @@ class Listvars(object):
         campos_join=[campo for p in prefijos  for campo in campos_capa_join if p in campo]
         return campos_join[0]
 
+    def report(self,table):
+        rows = arcpy.da.TableToNumPyArray(table,'*')
+        path=pythonaddins.SaveDialog("Guardar Reporte de AptiTool","Aptitool_report.xlsx","C:")
+        array = [['X','Y','Variable', 'Aptitud', 'Valor']]
+        for i in range(2,len(rows[0])):
+            aa=[rows[0][1][0],rows[0][1][1]]
+            [aa.append(x) for x in rows[0][i].split('_')]
+            array.append(aa)
+        workbook = xlsxwriter.Workbook(path)
+        worksheet = workbook.add_worksheet()
+        col = 0
+        for row, data in enumerate(array):
+            worksheet.write_row(row, col, data)
+        workbook.close()
+
     def onSelChange(self, selection):
         mxd = arcpy.mapping.MapDocument("CURRENT")
         df = arcpy.mapping.ListDataFrames(mxd)[0]
@@ -185,13 +202,12 @@ class Listvars(object):
         fields.extend(rdat)
         cursor.insertRow(fields)
         vect = arcpy.mapping.ListLayers(mxd, "V_*")
-        prefijos=["APT_","W_","_APT","Des","GRIDCODE"]
+        prefijos=["Des"]
         vec = [ i for i in vect if i.isFeatureLayer and i.name != 'data']
         vector_name =[i.name for i in vec]
         [arcpy.AddField_management (fcaux, field_name=i.name, field_type="TEXT") for i in vec]
         vector_fields=[self.getCampoPrefijo(i,prefijos) for i in vec]
         valores_vector = [str(self.getValoresVector(fcaux,i,"in_memory//"+arcpy.Describe(i).name,self.getCampoPrefijo(i,prefijos)).encode('utf-8').strip()) for i in vec]
-
         with arcpy.da.UpdateCursor(fcaux, vector_name) as cursor:
             for fila in cursor:
                 for num in xrange(len(valores_vector)):
@@ -207,6 +223,13 @@ class Listvars(object):
         arcpy.SelectLayerByAttribute_management(lyr, "NEW_SELECTION", ' "OBJECTID" = 1 ')
         # df.zoomToSelectedFeatures()
         df.extent = extent#lyr.getSelectedExtent()
+        sel = pythonaddins.MessageBox('Generar Reporte?','Reporte',4)
+        if sel == 'Yes':
+            self.report(fcaux)
+        elif sel == 'No':
+            pass
+        else:
+            pass
 
     def onEditChange(self, text):
         pass
