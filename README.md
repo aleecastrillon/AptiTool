@@ -9,15 +9,15 @@ El proceso de intalación es el siguiente:
 
 1. Descargar el `AddIn`:
 
-Exiten dos opciones de descarga, se puede descargar todo el repositorio o solo el ultimo Release del AddIn [Aqui](https://github.com/UpraAnalisis/AptiTool/releases/latest)
+    Exiten dos opciones de descarga, se puede descargar todo el repositorio o solo el ultimo Release del AddIn [Aqui](https://github.com/UpraAnalisis/AptiTool/releases/latest)
 
 2. Luego hay dos opciones:
 
-2.1. Si descargo el codigo, descomprimir y ejecutar el script `makeaddin.py`
+3. Si descargo el codigo, descomprimir y ejecutar el script `makeaddin.py`
 
-2.2. Si descargo el release, descomprimir. 
+4. Si descargo el release, descomprimir. 
 
-y finalmente comun a ambos copiar el archivo con extensión `.esriaddin` en el directorio:
+5. finalmente comun a ambos copiar el archivo con extensión `.esriaddin` en el directorio:
 
     ```directorio Arcgis
     %USERPROFILE%\Documents\ArcGIS\AddIns\
