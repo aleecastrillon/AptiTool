@@ -35,15 +35,15 @@ Ingresar a la vaersion de arcgis en la que se quiera instalar el AddIn y pegar e
 
 1. Seleccionar el criterio en el TOC de ArcGIS
 
-    ![Selec Criterio](img/selcriterio.PNG)
+    ![Select Criterio](img/selcriterio.PNG)
 
 2. Seleccionar la herramienta
 
-    ![](/img/selherr.PNG)
+    ![Select Herramienta](/img/selherr.PNG)
 
 3. Dar Click en el punto de interes que se desea consultar 
 
-    ![](/img/selpunto.PNG)
+    ![Select Punto](/img/selpunto.PNG)
 
 ### Selección Variables
 
@@ -51,22 +51,26 @@ Una vez realizado el proceso anterior el AddIn consulta en la gdb con las variab
 
 1. Seleccione variable a cargar en el en el menu desplegable
 
-    ![](/img/seleccvar.png)
+    ![Select Variable](/img/seleccvar.png)
 
 2. Mensaje advierte que la variable se esta cargando, pulse OK
 
-    ![](/img/carvar.PNG)
+    ![Cargar Variable](/img/carvar.PNG)
 
 ### Generación Reporte
 
 1. Se carga la variable y mensaje Advierte si quiere generar reporte. (Reporte es Opcional)
 
-    ![](/img/genrep.PNG)
+    ![Generar Report](/img/genrep.PNG)
 
 2. Si decide generar reporte seleccione donde lo desea guardar.
 
-    ![](/img/savrep.PNG)
+    ![Salvar Report](/img/savrep.PNG)
 
 3. De no generar reporte los datos quedan en un layer temporal llamado data y ahi los puede consultar. 
 
-    ![](/img/capcar.PNG)
+    ![Capa Cargada](/img/capcar.PNG)
+    
+4. El reporte aparece en excel de la siguiente forma: 
+
+    ![report](/img/rep.PNG)
