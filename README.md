@@ -11,12 +11,6 @@ El proceso de intalación es el siguiente:
 
 Exiten dos opciones de descarga, se puede descargar todo el repositorio o solo el ultimo Release del AddIn [Aqui](https://github.com/UpraAnalisis/AptiTool/releases/latest)
 
-
-
-    ```yml
-    theme: jekyll-theme-cayman
-    ```
-
 2. Luego hay dos opciones:
 
 2.1. Si descargo el codigo, descomprimir y ejecutar el script `makeaddin.py`
@@ -30,8 +24,6 @@ y finalmente comun a ambos copiar el archivo con extensión `.esriaddin` en el d
     ``` 
 
 Ingresar a la vaersion de arcgis en la que se quiera instalar el AddIn y pegar el archivo.
-
-
 
 ## Uso
 
