@@ -202,7 +202,7 @@ class Listvars(object):
         fields.extend(rdat)
         cursor.insertRow(fields)
         vect = arcpy.mapping.ListLayers(mxd, "V_*")
-        prefijos=["Des"]
+        prefijos=["Des_"]
         vec = [ i for i in vect if i.isFeatureLayer and i.name != 'data']
         vector_name =[i.name for i in vec]
         [arcpy.AddField_management (fcaux, field_name=i.name, field_type="TEXT") for i in vec]
