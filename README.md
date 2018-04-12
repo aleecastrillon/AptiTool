@@ -1,76 +1,115 @@
 # Aptitool AddIn
 
-Es una herramienta del tipo AddIn que se incorpora a ArcGIS para generar reporte del comportamiento de las variables según el componente que se seleccione. Esta herramienta es un complemento al proceso de zonificación que se desarrolla en la [UPRA](http://www.upra.gov.co/) y como tal hace falta que la estructura de almacenamiento se corresponda con la que se genera en este proceso, para mayor información dirigirse al repositorio de [zonificación](https://upraanalisis.github.io/zonificacion/). 
+Es una herramienta del tipo Add-In que se incorpora a ArcGIS para generar reporte del comportamiento de las variables según el componente que se seleccione. Esta herramienta es un complemento al proceso de zonificación que se desarrolla en la [UPRA](http://www.upra.gov.co/) y como tal hace falta que la estructura de almacenamiento se corresponda con la que se genera en este proceso, para mayor información dirigirse al repositorio de [zonificación](https://upraanalisis.github.io/zonificacion/).
 
 
 ## Instalación
 
 El proceso de instalación es el siguiente:
 
-1. Descargar el `AddIn`:
+1. Descargar el `Add-In`:
 
-    Existen dos opciones de descarga, se puede descargar todo el repositorio o solo el ultimo Release del AddIn [Aquí](https://github.com/UpraAnalisis/AptiTool/releases/latest)
+    Existen dos opciones de descarga, se puede descargar todo el repositorio o solo el ultimo Release del Add-In [Aquí](https://github.com/UpraAnalisis/AptiTool/releases/latest)
 
 2. Luego hay dos opciones:
 
 3. Si descargo el código, descomprimir y ejecutar el script `makeaddin.py`
 
-4. Si descargo el release, descomprimir. 
+4. Si descargo el release, descomprimir.
 
 5. finalmente común a ambos copiar el archivo con extensión `.esriaddin` en el directorio:
 
     ```directorio Arcgis
     %USERPROFILE%\Documents\ArcGIS\AddIns\
-    ``` 
+    ```
 
-Ingresar a la versión de arcgis en la que se quiera instalar el AddIn y pegar el archivo.
+Ingresar a la versión de ArcGis en la que se quiera instalar el Add-In y pegar el archivo.
 
-## Uso
+## Uso de la herramienta
 
-### Carga Capas Necesarias
+Para usar el Add-In Apptitool es necesario tener presente la estructura de Zonificación que se usa para las cadenas productivas, así como se ve en el siguiente gráfico:
+
+<p align="center">
+ <img src="Images\EstructuraNecesaria.png">
+</p>
+
+En la estructura se contempla que existe una GDB llamada **1_VARIABLES.gdb**, de esta el Add-In consultara la información contenida en el campo **Des***_ en el cual está contenido el metadato de la variable que se corresponde a El nombre de la Variable, la calificación y el valor que genero esta calificación.
+
+### Modo de empleo
 
 1. Cargar capas del criterio que se quieren consultar.
 
 ### Selección criterio
 
-1. Seleccionar el criterio en el TOC de ArcGIS
+1. a.	Situé el criterio que se desea consultar en la tabla de contenido (TOC) de ArcMAP.
 
-    ![Select Criterio](img/selcriterio.PNG)
+<p align="center">
+ <img src="Images\SeleccionCriterio.png">
+</p>
 
-2. Seleccionar la herramienta
+2. Asegurando que el criterio esta seleccionado en el TOC, proceder a hacer clic en el botón de la herramienta AptiTool
 
-    ![Select Herramienta](/img/selherr.PNG)
+<p align="center">
+ <img src="Images\SeleccionHerramienta.png">
+</p>
 
-3. Dar Click en el punto de interés que se desea consultar 
+3. Hacer clic en el punto de interés que se desea consultar
 
-    ![Select Punto](/img/selpunto.PNG)
+<p align="center">
+ <img src="Images\clickPunto.png">
+</p>
+
 
 ### Selección Variables
 
-Una vez realizado el proceso anterior el AddIn consulta en la gdb con las variables aquellas que corresponden a el criterio de interés, luego de eso carga los nombre en el menú desplegable y estan listas para ser adicionadas a la visualización del mapa. 
+Una vez realizado el proceso anterior el Add-In consulta en la gdb con las variables que corresponden a el criterio de interés, luego de eso carga los nombre en el menú desplegable y están listas para ser adicionadas a la visualización del mapa.
 
 1. Seleccione variable a cargar en el en el menú desplegable
 
-    ![Select Variable](/img/seleccvar.png)
+<p align="center">
+ <img src="Images\SeleccionVariable.png">
+</p>
 
-2. Mensaje advierte que la variable se está cargando, pulse OK
+2. Aparece un mensaje que advierte que la variable se está cargando, pulse OK
 
-    ![Cargar Variable](/img/carvar.PNG)
+<p align="center">
+ <img src="Images\CargarVariable.png">
+</p>
+
+3. La herramienta sitúa una vista más cercana al punto designado y carga la variable seleccionada al TOC.
+
+<p align="center">
+ <img src="Images\AcercarVista.png">
+</p>
 
 ### Generación Reporte
 
 1. Se carga la variable y mensaje Advierte si quiere generar reporte. (Reporte es Opcional)
 
-    ![Generar Report](/img/genrep.PNG)
+<p align="center">
+ <img src="Images\GenerarReporte.png">
+</p>
 
 2. Si decide generar reporte seleccione donde lo desea guardar.
 
-    ![Salvar Report](/img/savrep.PNG)
+<p align="center">
+<img src="img\savrep.PNG">
+</p>
 
-3. De no generar reporte los datos quedan en un layer temporal llamado data y ahí los puede consultar. 
+3. De no generar reporte los datos quedan en un layer temporal llamado data y ahí los puede consultar.
 
-    ![Capa Cargada](/img/capcar.PNG)
-    
-4. El reporte aparece en excel de la siguiente forma: 
+<p align="center">
+<img src="img\capcar.PNG">
+</p>
 
-    ![report](/img/rep.PNG)
+4. El reporte aparece en Excel de la siguiente forma;  para el punto con coordenadas X,Y para la variable desempeño fiscal que para ese punto obtuvo una calificación de A2 por que presenta un valor de IC entre 0.4764 y 0.655, que será algo como lo siguiente:
+
+ <p align="center">
+ <img src="Images\Reporte.png">
+</p>
+
+5. Para realizar la consulta a múltiples variables a la vez solo es necesario ubicar estas en el TOC de ArcMap y luego seleccionar otra de la lista desplegable, esto produce un resultado que tiene las coordenadas del punto en cuestión, los nombres de las variables consultadas, sus aptitudes y los valores correspondientes.
+
+<p align="center">
+<img src="Images\ReporteMultiple.png">
+</p>

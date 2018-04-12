@@ -1,19 +1,23 @@
+# -*- coding: utf-8 -*-
 import os
 import arcpy
 import xlsxwriter
 import pythonaddins
 
+arcpy.env.overwriteOutput = True
+
+
 
 class AptiTool(object):
     """Implementation for Upra_add_ins_addin.tool (Tool)"""
-    def __init__(self):
+    def __init__(self): ###función para obtener coordenadas con un click del mouse
         self.enabled = True
         self.varpath = r''
         self.shape = "NONE" # Can set to "Line", "Circle" or "Rectangle" for interactive shape drawing and to activate the onLine/Polygon/Circle event sinks.
         self.x = 0
         self.y = 0
 
-    def get_geodatabase_path(self, input_table):
+    def get_geodatabase_path(self, input_table):  ### Una función para obtener una ruta de geodatabase desde la clase de entidad o tabla
         '''Return the Geodatabase path from the input table or feature class.
         :param input_table: path to the input table or feature class
         '''
@@ -22,83 +26,57 @@ class AptiTool(object):
         if not [any(ext) for ext in ('.gdb', '.mdb', '.sde') if ext in os.path.splitext(workspace)]:
             return workspace
         else:
-            return os.path.dirname(workspace)
+           return os.path.dirname(workspace)
+
+        print "no hay capa"
 
     def onMouseDown(self, x, y, button, shift):
         pass
 
     def onMouseDownMap(self, x, y, button, shift):
-        Listvars.items = []
-        a = pythonaddins.GetSelectedTOCLayerOrDataFrame()
-        gdbpath = self.get_geodatabase_path(a.workspacePath)
-#       message = "Your mouse clicked \n longitud: " + str(x) + ", \n Latitud: " + str(y) + "\n And your selected \\
-#       layer is: " + a.name + "\n Located in gdb: " + a.workspacePath + "\n And GDB PATH is: " + gdbpath
-#       pythonaddins.MessageBox(message, "My Coordinates")
-        varpath = gdbpath + r'\1_VARIABLES.gdb'
-        listFC = []
-        dts = []
-        ft = []
-        ruta, nombre_gdb=os.path.split(a.workspacePath)
-        if os.path.exists(varpath):
-            # pythonaddins.MessageBox(varpath, "GDB for Variables")
-            arcpy.env.workspace = r''+varpath
-            print arcpy.env.workspace
-            listFC = arcpy.ListFeatureClasses(wild_card="V_*")
-            ras =  arcpy.ListRasters(wild_card="V_*")
-            dt = arcpy.ListDatasets()
-            for d in dt:
-                ft = arcpy.ListFeatureClasses(wild_card="V*", feature_type = 'All', feature_dataset = d)
-                dta= [d + '\\' + f for f in ft]
-                dts.extend(dta)
-                listFC.extend(ft)
-            listFC.extend(ras)
-            dts.extend(ras)
-            # pythonaddins.MessageBox(listFC, "Variables")
-            # pythonaddins.MessageBox(dts, "Variables")
-        elif os.path.exists(gdbpath + r'\1_VARIABLE.gdb'):
-            varpath = r''+ gdbpath + r'\1_VARIABLE.gdb'
-            arcpy.env.workspace = varpath
-            # print arcpy.env.workspace
-            listFC = arcpy.ListFeatureClasses(wild_card="V_*")
-            ras =  arcpy.ListRasters(wild_card="V_*")
-            dt = arcpy.ListDatasets()
-            for d in dt:
-                ft = arcpy.ListFeatureClasses(wild_card="V*", feature_type = 'All', feature_dataset = d)
-                dta = [d + '\\' + f for f in ft]
-                dts.extend(dta)
-                listFC.extend(ft)
-            listFC.extend(ras)
-            dts.extend(ras)
-        elif os.path.exists(r''+ gdbpath[0:-12] + r'\1_VARIABLE\{}'.format(nombre_gdb)):
-            varpath = r''+ gdbpath + r'\..\1_VARIABLE\{}'.format(nombre_gdb)
-            arcpy.env.workspace = varpath
-            # print arcpy.env.workspace
-            listFC = arcpy.ListFeatureClasses(wild_card="V_*")
-            ras =  arcpy.ListRasters(wild_card="V_*")
-            dts = listFC
-            dt = arcpy.ListDatasets()
-            listFC.extend(ras)
-            dts.extend(ras)
-        elif os.path.exists(r''+ gdbpath[0:-12] + r'\1_VARIABLES\{}'.format(nombre_gdb)):
-            varpath = r''+ gdbpath[0:-12] + r'\1_VARIABLES\{}'.format(nombre_gdb)
-            arcpy.env.workspace = varpath
-            #print arcpy.env.workspace
-            listFC = arcpy.ListFeatureClasses(wild_card="V_*")
-            ras =  arcpy.ListRasters(wild_card="V_*")
-            dts = listFC
-            dt = arcpy.ListDatasets()
-            listFC.extend(ras)
-            dts.extend(ras)
+        if pythonaddins.GetSelectedTOCLayerOrDataFrame() is not None:
+            Listvars.items = []
+            a = pythonaddins.GetSelectedTOCLayerOrDataFrame() ###Muestra la capa o el marco de datos seleccionado en la tabla de contenidos.
+            gdbpath = self.get_geodatabase_path(a.workspacePath) ###obtiene el path de los datos seleccionados del TOC
+    #       message = "Your mouse clicked \n longitud: " + str(x) + ", \n Latitud: " + str(y) + "\n And your selected \\
+    #       layer is: " + a.name + "\n Located in gdb: " + a.workspacePath + "\n And GDB PATH is: " + gdbpath
+    #       pythonaddins.MessageBox(message, "My Coordinates")
+            varpath = gdbpath + r'\1_VARIABLES.gdb' ####path de las variables que se compone de del path de la capa seleccionada y la gdb "1_VARIABLES.gdb"
+            listFC = [] ###instanciando la lista de los featureclass
+            dts = [] ### instanciar lista de las rutas de los feature class contenidos en un dataset
+            ft = [] #instanciamos la lista de los featureclass que estan contenidos dentro de un dataset
+            ruta, nombre_gdb=os.path.split(a.workspacePath) ###Se hace un split para obtener la ruta y el nombre de la gdb de la capa seleccionada en el TOC
+            if os.path.exists(varpath):####Si el path existe retorna True
+                # pythonaddins.MessageBox(varpath, "GDB for Variables")
+                arcpy.env.workspace = r''+varpath
+                print arcpy.env.workspace ####Imprime el workspace (cuando se ejecuta el AddIn, es útil porque con este mensaje sabemos si esta tomando la ruta correcta)
+                listFC = arcpy.ListFeatureClasses(wild_card="V_*") ####permite obtener la lista de los feature class que se encuentran en la gdb y cuyo nombre empiece por V_
+                ras =  arcpy.ListRasters(wild_card="V_*") ####permite obtener la lista de los raster que se encuentran en la gdb y cuyo nombre empiece por V_
+                dt = arcpy.ListDatasets() ###permite obtener la lista de los datasets
+
+                for d in dt: # para todos los elementos del dataset,
+                    ft = arcpy.ListFeatureClasses(wild_card="V*", feature_type = 'All', feature_dataset = d) ###lista de los featureclass que estan contenidos dentro de un dataset y empiezan por V
+                    dta= [d + '\\' + f for f in ft] ## Obtiene la ruta para todos los featureclass que estan en el dataset
+                    dts.extend(dta) ### el método extend agrega el contenido de dta (las rutas de fc ) a la lista dts
+                    listFC.extend(ft) ### el método extend agrega el cotenido de ft ( variables fc que estan en un dataset) en a la lsita listFC
+
+                listFC.extend(ras) ### el método extend agrega el cotenido de ras (variables tipo raster) en a la lsita listFC
+                dts.extend(ras) ### el método extend agrega el cotenido de ras (variables tipo raster) en a la lsita dts
+                # pythonaddins.MessageBox(listFC, "Variables")
+                # pythonaddins.MessageBox(dts, "Variables")
+                ## se elimino de la linea 63 a la linea 98 de la versio 09032018
+            else:
+                r =  r''+ gdbpath[0:-12] + r'\1_VARIABLES\{}'.format(nombre_gdb)
+                pythonaddins.MessageBox("GDB for Variables don't exist"+r, "Error GDB is not present in route")
+            Listvars.refresh()
+            for layer in dts:
+                Listvars.items.append(layer)
+            self.x = x
+            self.y = y
+            tool.deactivate()
+            pass
         else:
-            r =  r''+ gdbpath[0:-12] + r'\1_VARIABLES\{}'.format(nombre_gdb)
-            pythonaddins.MessageBox("GDB for Variables don't exist"+r, "Error GDB is not present in route")
-        Listvars.refresh()
-        for layer in dts:
-            Listvars.items.append(layer)
-        self.x = x
-        self.y = y
-        tool.deactivate()
-        pass
+          pythonaddins.MessageBox('No tiene un criterio seleccionado!!!', "Mensaje de advertencia")
 
     def onMouseUp(self, x, y, button, shift):
         pass
