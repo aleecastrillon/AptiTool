@@ -53,7 +53,7 @@ En la estructura se contempla que existe una GDB llamada **1_VARIABLES.gdb**, de
  <img src="Images\SeleccionHerramienta.png">
 </p>
 
-3. Hacer clic en el punto de interés que se desea consultar
+3. Hacer clic en el punto de interés que se desea consultar.
 
 <p align="center">
  <img src="Images\clickPunto.png">
